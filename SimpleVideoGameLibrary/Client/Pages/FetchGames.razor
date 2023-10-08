@@ -1,0 +1,33 @@
+﻿@page "/fetchgames"
+@inject HttpClient Http;
+
+<h3>Fetch Games</h3>
+
+@if (games.Count <= 0)
+{
+    <span>Loading Games...</span>
+}else
+{
+     <ul>
+        @foreach (var game in games)
+        {
+            <li>@game.Title - @game.Publisher - @game.ReleaseYear</li>
+        }
+    </ul>   
+}
+
+@code {
+    List<VideoGame> games = new List<VideoGame>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        var response = await Http.GetFromJsonAsync<List<VideoGame>>("api/videogame");
+        if (response is not null)
+        {
+            games = response;
+        }
+    }
+}
+
+
+
